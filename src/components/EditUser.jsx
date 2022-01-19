@@ -4,15 +4,12 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import { add, remove } from "../store/UserSlice";
 
 const EditUser = ({ type }) => {
-  // console.log("match", match.params.id);
   const history = useHistory();
   const match = useRouteMatch();
 
   const userList = useSelector((state) => state.userActions.users);
   const count = useSelector((state) => state.userActions.count);
 
-  // const [submitType, setSubmitType] = useState(type);
-  // console.log("submiType", type);
   let newId,
     newName = "",
     newEmail = "",
@@ -22,7 +19,7 @@ const EditUser = ({ type }) => {
   if (match.params.id) {
     newId = match.params.id;
     let user = userList[match.params.id - 1];
-    // console.log(user);
+
     ({
       name: newName,
       email: newEmail,
@@ -30,16 +27,8 @@ const EditUser = ({ type }) => {
       role: newRole,
       status: newStatus,
     } = user);
-    // console.log("if called");
   } else {
     newId = count + 1;
-    // newName = "";
-    // newEmail = "";
-    // newTitle = "";
-    // newRole = "";
-    // newStatus = "";
-
-    // console.log("else called", newName);
   }
 
   const dispatch = useDispatch();
@@ -62,27 +51,21 @@ const EditUser = ({ type }) => {
   const [errorStatus, setErrorStatus] = useState(true);
 
   useEffect(() => {
-    // console.log("useEffect", type);
     if (type === "add") {
-      // setId(id);
       setName("");
       setEmail("");
       setTitle("");
       setRole("");
-      // setStatus("");
     }
   }, [type]);
 
   const handleChange = ({ target: { name: enteredName, value } }) => {
-    console.log(enteredName, value);
     const err = { ...error };
     switch (enteredName) {
       case "name": {
         if (!value) {
-          // setError({ ...err, name: "* Userid is required" });
           err.name = "* Userid is required";
         } else {
-          // setError({ ...err, name: "" });
           err.name = "";
         }
         setName(value);
@@ -116,28 +99,24 @@ const EditUser = ({ type }) => {
         break;
       }
       case "status": {
-        console.log("status ::", enteredName, value);
         if (!value) {
           err.status = "* Status is required";
         } else {
           err.status = "";
         }
         setStatus(value);
-        console.log("status ::", status);
+
         break;
       }
 
       // console.log(error);
     }
     setError(err);
-    // console.log("if outside block", err);
-    // console.log("else outside block", name, email, role, title, status);
+
     if (err.name || err.email || err.role || err.title) {
       setErrorStatus(true);
-      console.log("if block", err.name, err.email, err.role, err.title);
     } else if (name && email && role && title) {
       setErrorStatus(false);
-      console.log("else block", name, email, role, title, status);
     }
   };
 
@@ -149,10 +128,9 @@ const EditUser = ({ type }) => {
       email,
       title,
       role,
-      status,
+      status: status || "Active",
     };
     if (!errorStatus) {
-      console.log(newEntry);
       dispatch(add(newEntry));
       setId("");
       setName("");
@@ -173,16 +151,6 @@ const EditUser = ({ type }) => {
       </h1>
       <div className="form-container">
         <form onSubmit={updateResponse}>
-          {/* <div>
-            <label htmlFor="id">Id</label>
-            <input
-              type="number"
-              className=" "
-              disabled
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-            />
-          </div> */}
           <div className="my-3 ">
             <label htmlFor="name">Name</label>
             <span className="ml-12">{error.name}</span>
@@ -195,7 +163,6 @@ const EditUser = ({ type }) => {
               }`}
               type="text"
               value={name}
-              // onChange={(e) => setName(e.target.value)}
               onChange={handleChange}
             />
           </div>
@@ -212,7 +179,6 @@ const EditUser = ({ type }) => {
                   : ""
               }`}
               value={email}
-              // onChange={(e) => setEmail(e.target.value)}
               onChange={handleChange}
             />
           </div>
@@ -228,7 +194,6 @@ const EditUser = ({ type }) => {
                   : ""
               }`}
               value={title}
-              // onChange={(e) => setTitle(e.target.value)}
               onChange={handleChange}
             />
           </div>
@@ -244,7 +209,6 @@ const EditUser = ({ type }) => {
                   : ""
               }`}
               value={role}
-              // onChange={(e) => setRole(e.target.value)}
               onChange={handleChange}
             />
           </div>
@@ -254,17 +218,10 @@ const EditUser = ({ type }) => {
             <select
               name="status"
               id="status"
-              // className={`w-full rounded-lg ${
-              //   error.status
-              //     ? "focus:border-red-500 focus:ring-1 focus:ring-red-500"
-              //     : ""
-              // }`}
               className="w-full rounded-lg"
               value={status}
-              // onChange={(e) => setStatus(e.target.value)}
               onChange={handleChange}
             >
-              {/* <option value="">--Please choose an option--</option> */}
               <option value="Active">Active</option>
               <option value="Disable">InActive</option>
             </select>
@@ -272,7 +229,6 @@ const EditUser = ({ type }) => {
           <div className="flex justify-center">
             <button
               type="submit"
-              // onClick={() => history.replace("/userSuccess")}
               className={`text-white bg-cyan-500 rounded-full px-5 py-3 mx-2 hover:bg-cyan-600 w-36 ${
                 errorStatus ? "opacity-25 cursor-not-allowed" : ""
               }`}

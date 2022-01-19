@@ -44,12 +44,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     add: (state, action) => {
-      console.log("payload ::", action.payload, typeof action.payload.id);
+      // console.log("payload ::", action.payload, typeof action.payload.id);
 
       const isExist = state.users.find((user) => {
         return Number(user.id) === Number(action.payload.id);
       });
-      console.log("isExist ::", isExist);
+      // console.log("isExist ::", isExist);
       if (isExist) {
         state.users[action.payload.id - 1] = action.payload;
       } else {
